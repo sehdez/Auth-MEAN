@@ -1,3 +1,7 @@
+https://jwt.io/ JsonWebToken
+
+El use es un middlewere
+
 ------------------- Auth Backend ---------------------
 
 -----------Capitulo 1--------------
@@ -22,7 +26,7 @@ en la consola, ejecutar:
 
 -----------Capitulo 2--------------
 Instalaciones necesarias
-<npm i bcryptjs dotenv cors express express-validator mongoose>
+<npm i bcryptjs dotenv cors express express-validator mongoose jsonwebtoken>
 i	  : install
 bcryptjs: para encriptar y hacer hash de las contraseñas
 dotenv  : para configurar variables de entorno
@@ -36,4 +40,117 @@ que permite controlar las peticiones HTTP asíncronas
 que se pueden realizar desde un navegador a un servidor con 
 un dominio diferente de la página cargada originalmente.")
 
- 
+-----------Capitulo 3--------------
+Configurar Servidor de Express
+borrar cualquier cosa en index.js
+importar express:
+const express = require('express');
+//Crear el servidor/aplicación de express
+const app = express();
+
+//Levantar la app de express -se puede elegir cualquier puerto-
+app.listen( 4000, ()=>{console.log(`servidor corriendo en puerto ${ 4000 }`); );
+
+//Crear una petición GET
+app.get('/', (req, resp)=>{
+	resp.json({
+		ok : true,
+		msg: 'Todo salió Bien'	
+})
+});
+
+-----------Capitulo 4--------------
+Crear carpeta routes, dentro un fichero auth.js
+// importar Router
+const { Router } = require('express');
+const router = Router();
+
+//Crear Rutas -agregar rutas para el login('/') y el jwt('/renew')
+router.post( '/new', (req, res) =>{
+	return res.json({
+		ok:true,
+		msg: 'Crear usuario'
+})
+//Exportar
+module.exports = router;
+
+En el index, eliminar la petición al '/' y agregar middleware (use)
+app.use( '/api/auth', require('routes/auth');
+
+)
+
+
+-----------Capitulo 5--------------
+
+Crear carpeta de controllers y un fichero auth.js 
+Mover las funciones de callback al archivo y generlas
+como constantes, ejemplo:
+
+//importar response
+const { response } = require('express');
+
+const crearUsuario = (req, res = response) =>{
+	return res.json({
+		ok:true,
+		msg: 'Crear usuario'
+}
+module.exports = {
+crearUsuario
+}
+
+después agregamos el nombre de la constante en donde anteriormente
+estaba la función de callback importando la constante.
+y hacer lo mismo con las otras rutas (revalidar token y login)
+
+-----------Capitulo 6--------------
+Configuar CORS y body de las peticiones
+En el index importartamos cors de cors
+//cors:
+app.use ( cors() );
+//Lectura y parseo del body
+app.use ( express.json() );
+
+En el controlador auth vamos a desestructurar el request que nos manda el usuario
+
+const { email, name, password } = req.body;
+
+-----------Capitulo 7--------------
+Variables de entorno de Node.
+se crea un fichero en la raíz con el nombre ".env"
+PORT=4000 
+
+en la parte de importaciones del index, agregamos lo siguiente...
+require ("dotenv").config();
+para poder utilizar las varibles de entorno,
+y cambiamos el puerto 4000, por process.env.PORT
+
+-----------Capitulo 8--------------
+Servir una página HTTP desde Express
+Crear un archivo html dentro de una carpeta llamada public
+
+en el index js crear otro  middleware
+app.use( express.static('public');
+
+
+
+
+-----------Capitulo 9-------------- 
+en las rutas el segundo argumento es un arreglo de middlewares.
+check('email','El email es obligatorio').isEmail().islength({ min:6 })
+
+
+--------------- index ------------------
+const express = require('express');
+const app = express();
+
+
+
+
+
+
+
+
+
+
+
+
